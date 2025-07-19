@@ -1,11 +1,6 @@
 Welcome to your new dbt project!
 
-### Using the starter project
-
-Try running the following commands:
-- dbt run
-- dbt test
-
+**Goal** - *Build a set of consistent, auditable, and scalable SaaS financial metrics (MRR, ARR, CAC, LTV) using dbt, based on raw payment and subscription data stored in Snowflake. These metrics must remain accurate as new data is ingested.*
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
