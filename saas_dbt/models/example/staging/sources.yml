@@ -1,0 +1,62 @@
+version: 2
+
+sources:
+  - name: saas_dbt_raw
+    database: DEMO_DB
+    schema: PUBLIC
+    tables:
+      - name: customer_cases
+        description: >
+          Raw table containing customer support case records.
+          Each row represents a unique support case initiated by a customer.
+        columns:
+          - name: CASE_ID
+            description: Unique identifier for the support case
+          - name: DATE_TIME
+            description: Timestamp when the case was created
+          - name: CUSTOMER_ID
+            description: Foreign key identifying the customer who raised the case (not defined)
+          - name: CHANNEL
+            description: Channel used to contact support (e.g., phone, email)
+          - name: REASON
+            description: Reason for support contact (e.g., signup, cancel)
+
+      - name: customer_info
+        description: >
+          Raw table containing demographic details of each customer.
+          Each row is a customer record.
+        columns:
+          - name: CUSTOMER_ID
+            description: unique identifier for customer
+          - name: AGE
+            description: Age of the customer
+          - name: GENDER
+            description: Gender of the customer
+
+      - name: customer_product
+        description: >
+          Raw table recording customer subscriptions to products.
+          Each row indicates when a customer started or cancelled a product.
+        columns:
+          - name: CUSTOMER_ID
+            description: Foreign key for customer (not defined)
+          - name: PRODUCT
+            description: Product name or identifier (mapping may be needed)
+          - name: SIGNUP_DATE_TIME
+            description: Timestamp when customer signed up for the product
+          - name: CANCEL_DATE_TIME
+            description: Timestamp when customer cancelled the product (nullable)
+
+      - name: product_info
+        description: >
+          Raw table containing product catalog information including pricing and billing cycles.
+          Each row is a unique product.
+        columns:
+          - name: PRODUCT_ID
+            description: Unique identifier for the product
+          - name: NAME
+            description: Name of the product
+          - name: PRICE
+            description: Price charged per billing cycle
+          - name: BILLING_CYCLE
+            description: Number of days in one billing cycle (e.g., 30 for monthly)
