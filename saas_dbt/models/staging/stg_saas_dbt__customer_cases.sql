@@ -10,15 +10,15 @@ renamed as(
 
     select
         --id
-        CASE_ID as case_id,
-        CUSTOMER_ID as  customer_id,
+        case_id as case_id,
+        customer_id as  customer_id,
 
         --strings
-        lower(trim(CHANNEL)) as channel,
-        lower(trim(REASON)) as reason,
+        lower(trim(channel)) as channel,
+        lower(trim(reason)) as reason,
 
         --datetime
-        DATE_TIME::timestamp_tz as created_at
+        cast(date_time as timestamp_tz) as created_at
 
     from
         source

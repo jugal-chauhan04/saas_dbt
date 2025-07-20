@@ -12,6 +12,7 @@ renamed as(
         product_id as product_id,
 
         -- string -> renaming name to billing type (monthly or annual)
+        -- trimming the values 'annual_subscription' to just 'annual' or 'monthly'
         trim(lower(replace(name, '_subscription', ''))) as billing_type,
 
         -- number

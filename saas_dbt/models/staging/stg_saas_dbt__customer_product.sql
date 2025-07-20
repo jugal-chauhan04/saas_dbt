@@ -16,7 +16,7 @@ renamed as(
         cast(signup_date_time as timestamp_tz) as signup_time,
         cast(cancel_date_time as timestamp_tz) as cancel_time,
 
-        -- boolean
+        -- boolean-> adding a composite column 'is_active' which is true is customer is active and false if not
         case when cancel_date_time is null then true else false end as is_active
     from
         source 
