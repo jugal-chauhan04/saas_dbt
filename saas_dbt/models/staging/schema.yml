@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: stg_saas_dbt__customer_cases
+    description: >
+      Cleaned and standardized staging model for customer support cases.
+      Prepares data for downstream modeling by applying column renaming,
+      value trimming, type enforcement, and controlled vocabularies.
+
+    columns:
+      - name: case_id
+        description: Unique identifier for each customer support case
+        tests:
+          - unique
+          - not_null
+
+      - name: created_at
+        description: Timestamp when the case was created (converted to TIMESTAMP with timezone)
+        tests:
+          - not_null
+
+      - name: customer_id
+        description: Foreign key to the customer dimension table
+        tests:
+          - not_null
+
+      - name: channel
+        description: Contact method used by the customer (standardized lowercase)
+        tests:
+          - accepted_values:
+              values: ['email', 'phone']
+              config:
+                severity: warn
+
+      - name: reason
+        description: Customer-reported reason for the case (standardized lowercase)
+        tests:
+          - accepted_values:
+              values: ['signup', 'support', 'cancel']
+              config:
+                severity: warn
+
+  - name: stg_saas_dbt__customer_info
+    columns:
+      - name: customer_id
+        description: Unique identifier for customer_cases
+        tests:
+          - unique
+          - not_null 
+      - name: age 
+        description: age of the customer (int data type)
+        tests: 
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "age between 10 and 100"
+      - name: gender 
+        description: Gender of the customer
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['male', 'female', 'other', 'prefer not to say']
+              config:
+                severity: warn

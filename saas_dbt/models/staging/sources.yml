@@ -1,0 +1,54 @@
+version: 2
+
+sources:
+  - name: saas_dbt_raw
+    database: DEMO_DB
+    schema: PUBLIC
+    tables:
+      - name: customer_cases
+        description: Customer support case records
+        columns:
+          - name: CASE_ID
+            description: Unique case identifier
+          - name: DATE_TIME
+            description: Timestamp when the case was created
+          - name: CUSTOMER_ID
+            description: Customer who raised the case
+          - name: CHANNEL
+            description: Contact channel used
+          - name: REASON
+            description: Reason for customer contact
+
+      - name: customer_info
+        description: Basic demographic information for customers
+        columns:
+          - name: CUSTOMER_ID
+            description: Unique identifier for the customer
+          - name: AGE
+            description: Age of the customer
+          - name: GENDER
+            description: Gender of the customer
+
+      - name: customer_product
+        description: Mapping between customers and products
+        columns:
+          - name: CUSTOMER_ID
+            description: Customer identifier
+          - name: PRODUCT
+            description: Name of the subscribed product
+          - name: SIGNUP_DATE_TIME
+            description: When the product subscription began
+          - name: CANCEL_DATE_TIME
+            description: When the product subscription ended (if applicable)
+
+      - name: product_info
+        description: Metadata about available products
+        columns:
+          - name: PRODUCT_ID
+            description: Unique identifier for each product
+          - name: NAME
+            description: Product name
+          - name: PRICE
+            description: Product price
+          - name: BILLING_CYCLE
+            description: Billing frequency (e.g. monthly)

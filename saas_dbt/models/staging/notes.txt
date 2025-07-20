@@ -1,0 +1,109 @@
+things to include in article:
+
+    DBT Staging Model Checklist (Goal-Aligned)
+
+1. Define the Goal
+What metrics or outputs will depend on this model? (e.g., MRR, ARR)
+
+Who are the downstream consumers? (BI tools, data marts, other models)
+
+What qualities are critical? (Consistency, accuracy, scalability, performance)
+
+2. Understand the Raw Data
+Review structure: column names, data types, nullability, sample values
+
+Identify missing keys: primary/foreign keys not present but logically implied
+
+Check encoding and formatting issues (e.g., NA strings, inconsistent casing)
+
+3. Source Configuration
+Create sources.yml with:
+
+Proper naming of source tables
+
+Column-level descriptions
+
+Source-level tests if needed (freshness, loaded_at_field, etc.)
+
+4. Model Naming and Structure
+Prefix with stg_
+
+Use consistent, snake_case naming for columns and models
+
+Separate staging models by source table (1:1 mapping)
+
+5. Transformation Planning
+Column renaming for clarity and consistency
+
+Data type standardization (e.g., timestamp, numeric, boolean)
+
+Text normalization (lowercasing, trimming, formatting)
+
+Null handling and default value logic
+
+Enrich fields if needed (e.g., derived flags, categorization)
+
+6. Test Planning
+not_null and unique for primary keys
+
+relationships to validate join keys across tables
+
+accepted_values for categorical fields
+
+Set severity: warn or error depending on tolerance and trust level
+
+7. Materialization Decision
+Default to materialized: table
+
+Avoid incremental unless upstream data supports changelogs or row uniqueness
+
+Avoid view if downstream dependencies are complex or latency-sensitive
+
+8. Documentation (schema.yml)
+Add table description aligned with business context
+
+Add column-level descriptions
+
+Reference testing decisions and known assumptions
+
+9. Dependency Awareness
+Consider upstream volatility: if the source table structure might change
+
+Consider downstream fragility: if multiple models rely on the staging model
+
+Build for stability and reusability
+
+10. Version Control and Dev Hygiene
+Commit schema planning before implementing model logic
+
+Track model iterations using branches and commits
+
+Use meaningful commit messages and isolate staging changes per PR
+
+
+
+based on our goal (mrr, arr) for our case here, the upstream volatility im think would be low, 
+i mean the size of the source data will definitely grow but the structure would remain same there 
+shouldnt be any changes to that. additionally there will lots of downstream dependencies 
+as mrr and arr will be used in dashboards reports as parent metric and accessed at different levels.
+ how does this requirement influence design of staging model. 
+
+ It influences the design in four direct ways:
+
+Materialization Type
+→ Use materialized: table to ensure faster performance and stability across many downstream reads. 
+Avoid view as it recalculates every time. Avoid incremental unless future ingestion allows row-based 
+updates or changelogs.
+
+Rigorous Standardization
+→ Ensure all renaming, casting, formatting, and null handling are deterministic and locked. 
+Downstream models must not reapply these transformations. Staging becomes the single point of standard.
+
+Test Coverage
+→ Maximize integrity checks (not_null, unique, accepted_values, relationships). Downstream failures 
+due to inconsistent staging will ripple across all reports and dashboards.
+
+Backward Compatibility
+→ Never change column names, types, or logic in the staging model without clear versioning or 
+change management. Treat the staging layer as an interface contract for all downstream users.
+
