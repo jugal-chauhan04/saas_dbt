@@ -41,6 +41,10 @@ models:
                 severity: warn
 
   - name: stg_saas_dbt__customer_info
+    description: >
+      Cleaned and standardized staging model for customer info.
+      Prepares data for downstream modeling by applying column renaming,
+      value trimming, type enforcement, and controlled vocabularies.
     columns:
       - name: customer_id
         description: Unique identifier for customer_cases
@@ -61,3 +65,62 @@ models:
               values: ['male', 'female', 'other', 'prefer not to say']
               config:
                 severity: warn
+
+  - name: stg_saas_dbt__customer_product
+    description: >
+      Cleaned and standardized staging model for customer and product.
+      Prepares data for downstream modeling by applying column renaming,
+      value trimming, type enforcement, and controlled vocabularies.
+    columns:
+      - name: customer_id
+        description: Foreign key referencing unique customer id from customer info
+        tests:
+          - not_null
+          - unique 
+      - name: product_id
+        description: id of the product refernecing product info table.
+        tests:
+          - not_null
+      - name: signup_time
+        description: timestamp of customer signup
+        tests: 
+          - not_null
+      - name: cancel_time 
+        description: timstamp of customer cancellation.
+      - name: is_active 
+        description: boolean flag indicating whether the customer is currently active or not
+        tests:
+          - not_null
+
+  - name: stg_saas_dbt__product_info
+    description: >
+      Cleaned and standardized staging model for product info.
+      Prepares data for downstream modeling by applying column renaming,
+      value trimming, type enforcement, and controlled vocabularies. 
+
+    columns:
+      - name: product_id 
+        description: unique identifier for a product
+        tests:
+          - not_null 
+          - unique 
+      - name: billing_type
+        description: type of subscription plam
+        tests: 
+          - not_null
+          - accepted_values:
+              values: ['annual', 'monthly']
+              config:
+                severity: warn
+      - name: price 
+        description: price listed for the product
+        tests:
+          - not_null
+      - name: billing_cycle 
+        description: billing cycle in integer value representing months
+        tests:
+          - not_null 
+      
+
+        
+
