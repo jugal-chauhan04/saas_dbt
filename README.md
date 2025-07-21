@@ -48,7 +48,8 @@ Additionally, in the staging layer itself, it’s considered best practice to ma
 <br>
 
 <figure>
-  <img width="861" height="436" alt="2025-07-21 (5)" align="center" src="https://github.com/user-attachments/assets/249f6277-adff-48ac-b3fe-c7a694f62a30" width="600" height="351" alt="sources yml"/><br>
+  <img width="861" height="436" align="center" alt="sources.yml" src="https://github.com/user-attachments/assets/e39d5efc-df32-4668-89ee-b1309c01bbdd" /><br>
+
   <figcaption style="text-align:center;"><em>Figure 2:</em> A Snapshot of sources.yml file</figcaption>
 </figure>
 
