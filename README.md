@@ -8,6 +8,8 @@ This project focuses specifically on planning and implementing the staging layer
 
 ### 1. Determining the purpose of data transformation.  
 
+<img width="1536" height="1024" alt="img1" src="https://github.com/user-attachments/assets/67a8e01a-d6ad-457f-bacd-36e8a812fe8b" />  
+
 It is crucial to understand how the data will be applied by the organization prior to applying any transformation functions. While the most common goal is to produce clean and consistent dashboards and reports for analysts, product managers, and decision-makers, that’s only one part of the picture. The way you design a staging layer should be directly shaped by the end goals of your transformation pipeline.  
 
 For example, the approach may vary depending on whether the data is used for metric standardization across teams, enforcing data quality, reshaping historical data for cohort or retention analysis, or powering downstream tools like BI dashboards, machine learning models, or operational workflows. Each of these use cases influences the structure of staging models, from which fields you clean and how you name columns, to how you handle anomalies and maintain consistency across pipelines.  
@@ -15,6 +17,8 @@ For example, the approach may vary depending on whether the data is used for met
 For this project, the end goal is to enable metric standardization. Specifically, to develop consistent, accurate, and scalable organization-wide definitions of Monthly Recurring Revenue (MRR) and Annual Recurring Revenue (ARR).  
 
 ### 2. Understanding the Raw Data and Loading it into the Data Warehouse  
+
+<img width="1024" height="1024" alt="img2" src="https://github.com/user-attachments/assets/e2893903-5cbb-4868-b5fa-3ff53db77a99" />  
 
 For this project, I used a publicly available dataset from Kaggle titled Customer Subscription Data, which contains four key tables:  
 
