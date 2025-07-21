@@ -29,4 +29,14 @@ I loaded these .csv files directly into Snowflake without applying any upfront c
 
 Before moving on to modeling, I spent time reviewing the raw data — inspecting column names, data types, nullability, unique identifiers, and sample values, while watching for formatting issues or inconsistent encoding. This initial review helps build a strong intuition for the data, which is crucial for designing effective staging logic downstream.  
 
+### 3. Project Configuration and Planning  
+
+Setting up a dbt project starts with a clean working environment. I began by creating a dedicated directory, setting up a virtual environment to install dbt, and connecting it to my Snowflake database. Version control is essential for collaboration and tracking changes over time, so Git was initialized from the start.
+
+One of the key principles in dbt is structure. A modular and well-organized file system makes the project easier to maintain as it grows. Consistent naming conventions across folders, model files, and columns help avoid confusion, especially when multiple people are involved or when the project scales over time. Inside the models directory, I created a staging folder to house all models related to raw source cleaning. This aligns with dbt’s philosophy of keeping early transformation layers simple and reversible.
+
+Configuration files are also a core part of dbt. The sources.yml file is where raw tables are registered—defining the database, schema, table names, and column-level metadata exactly as they exist in the warehouse. This creates a clear link between the transformation logic and the raw data. The schema.yml file complements this by defining model-level details such as renaming rules, column descriptions, and data quality tests like not_null and unique. These tests help catch issues early and keep assumptions about the data explicit.
+
+In the staging layer itself, it’s considered best practice to maintain a one-to-one mapping between source tables and models. Rather than performing joins or aggregations, the staging layer focuses on light, modular transformations—renaming fields, fixing data types, handling formatting issues, and applying standard naming conventions. Keeping this layer minimal ensures that it’s easy to adapt when the raw data structure changes, and it also supports clarity when building more complex models later on.
+
 
