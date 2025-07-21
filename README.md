@@ -8,8 +8,6 @@ This project focuses specifically on planning and implementing the staging layer
 
 ### 1. Determining the purpose of data transformation.  
 
-<img width="1536" height="1024" alt="img1" src="https://github.com/user-attachments/assets/67a8e01a-d6ad-457f-bacd-36e8a812fe8b" />  
-
 It is crucial to understand how the data will be applied by the organization prior to applying any transformation functions. While the most common goal is to produce clean and consistent dashboards and reports for analysts, product managers, and decision-makers, that’s only one part of the picture. The way you design a staging layer should be directly shaped by the end goals of your transformation pipeline.  
 
 For example, the approach may vary depending on whether the data is used for metric standardization across teams, enforcing data quality, reshaping historical data for cohort or retention analysis, or powering downstream tools like BI dashboards, machine learning models, or operational workflows. Each of these use cases influences the structure of staging models, from which fields you clean and how you name columns, to how you handle anomalies and maintain consistency across pipelines.  
@@ -17,8 +15,6 @@ For example, the approach may vary depending on whether the data is used for met
 For this project, the end goal is to enable metric standardization. Specifically, to develop consistent, accurate, and scalable organization-wide definitions of Monthly Recurring Revenue (MRR) and Annual Recurring Revenue (ARR).  
 
 ### 2. Reviewing Raw Data before Modelling.
-
-<img width="1024" height="1024" alt="img2" src="https://github.com/user-attachments/assets/e2893903-5cbb-4868-b5fa-3ff53db77a99" />  
 
 For this project, I used a publicly available dataset from Kaggle titled Customer Subscription Data, which contains four key tables:  
 
@@ -44,7 +40,7 @@ Moreover, configuration files are also a core part of dbt. The sources.yml file 
 Additionally, in the staging layer itself, it’s considered best practice to maintain a one-to-one mapping between source tables and models. Rather than performing joins or aggregations, the staging layer focuses on light, modular transformations—renaming fields, fixing data types, handling formatting issues, and applying standard naming conventions. Keeping this layer minimal ensures that it’s easy to adapt when the raw data structure changes, and it also supports clarity when building more complex models later on.  
 
 <figure>
-  <img src="https://github.com/user-attachments/assets/640d9576-281d-4ac6-a897-c04883333162" width="600" height="355" alt="schema yml"><br>
+  <img src="https://github.com/user-attachments/assets/99d0d515-9c77-4504-825f-0608aa776b53" align="center" width="861" height="436" alt="schema yml"/><br>
   <figcaption style="text-align:center;"><em>Figure 1:</em> A Snapshot of schema.yml file</figcaption>
 </figure>
 
@@ -52,7 +48,7 @@ Additionally, in the staging layer itself, it’s considered best practice to ma
 <br>
 
 <figure>
-  <img src="https://github.com/user-attachments/assets/1158dfa2-32a1-4897-839d-a715f2da5394" width="600" height="351" alt="sources yml"><br>
+  <img width="861" height="436" alt="2025-07-21 (5)" align="center" src="https://github.com/user-attachments/assets/249f6277-adff-48ac-b3fe-c7a694f62a30" width="600" height="351" alt="sources yml"/><br>
   <figcaption style="text-align:center;"><em>Figure 2:</em> A Snapshot of sources.yml file</figcaption>
 </figure>
 
@@ -68,8 +64,6 @@ When designing the staging layer, it’s important to think beyond the immediate
 On the upstream side, it’s worth assessing how likely the raw source tables are to change. In this case, while the volume of the SaaS data is expected to grow, the schema itself is relatively stable and we’re unlikely to see sudden shifts in column names or table structure. That reduces the risk of unexpected breakages from the data source.
 
 Downstream, however, the dependencies are extensive. Since MRR and ARR are core business metrics, they power multiple dashboards and reports, and are often accessed at various levels - by product, customer, region, or billing cycle. This makes the staging layer a critical foundation, and any inconsistencies here could ripple through the entire analytics stack.  
-
-<img width="1024" height="1024" alt="img5" src="https://github.com/user-attachments/assets/4b728d23-e67f-4c95-a27d-11c8d811290b" />
 
 
 To design a stable and reusable staging layer that meets these needs, I focused on four key principles:
@@ -101,7 +95,7 @@ I use Common Table Expressions (CTEs) extensively to break down the logic into c
 Moreover, documentation plays a central role in model building. I include a table-level description that aligns the model with its business context, making it easier for both technical and non-technical stakeholders to understand its purpose. At the column level, I add clear descriptions to explain the role of each field, including any transformations or assumptions. It is equally important to reference decisions around testing, such as why certain fields require uniqueness or what values are considered valid. These details help preserve clarity as the model evolves.  
 
 <figure>
-  <img width="859" height="433" alt="2025-07-21 (4)" src="https://github.com/user-attachments/assets/741e901b-6760-408a-857e-8395e72ce099" /><br>
+  <img width="861" height="436" alt="2025-07-21 (4)" align="center" src="https://github.com/user-attachments/assets/741e901b-6760-408a-857e-8395e72ce099" /><br>
   <figcaption style="text-align:center;"><em>Figure 3:</em> staging model for customer product table</figcaption><br>
 </figure>  
 
