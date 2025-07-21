@@ -2,7 +2,7 @@
 
 In modern data pipelines, ELT (Extract, Load, Transform) has become the standard. Tools like Snowflake, a cloud-based data warehouse, and dbt (data build tool), an open-source transformation tool, allow teams to model data in a clean, scalable, and modular way. Before diving into the specifics of the staging layer, it's important to understand the core philosophy behind dbt. At its heart, dbt is built on the principle of modular, layered transformations. Meaning, the data pipelines are clearly defined into stages: staging, intermediate, and mart layers.  
 
-This modular structure ensures maintainability, compatibility, and scalability as an organization evolves. Whether the data volume increases, new team members join, or the use cases expand to include dashboards, reports, or machine learning models, having a well-layered transformation pipeline ensures things stay manageable and reliable. One might argue as to why not use sql stored procedures and a scheduler to achieve what dbt does, well there is a clear distinction that is explained in this video ![dbt vs stored procedures](https://www.youtube.com/watch?v=QwY5PpDP0iI&t=465s).  
+This modular structure ensures maintainability, compatibility, and scalability as an organization evolves. Whether the data volume increases, new team members join, or the use cases expand to include dashboards, reports, or machine learning models, having a well-layered transformation pipeline ensures things stay manageable and reliable. One might argue as to why not use sql stored procedures and a scheduler to achieve what dbt does, well there is a clear distinction that is explained in this video [dbt vs stored procedures](https://www.youtube.com/watch?v=QwY5PpDP0iI&t=465s).  
 
 This project focuses specifically on planning and implementing the staging layer, which is the first and most foundational layer, responsible for standardizing raw SaaS payment data in preparation for calculating core metrics like MRR and ARR.  
 
@@ -16,7 +16,7 @@ For example, the approach may vary depending on whether the data is used for met
 
 For this project, the end goal is to enable metric standardization. Specifically, to develop consistent, accurate, and scalable organization-wide definitions of Monthly Recurring Revenue (MRR) and Annual Recurring Revenue (ARR).  
 
-### 2. Understanding the Raw Data and Loading it into the Data Warehouse  
+### 2. Reviewing Raw Data before Modelling.
 
 <img width="1024" height="1024" alt="img2" src="https://github.com/user-attachments/assets/e2893903-5cbb-4868-b5fa-3ff53db77a99" />  
 
@@ -67,20 +67,27 @@ When designing the staging layer, it’s important to think beyond the immediate
 
 On the upstream side, it’s worth assessing how likely the raw source tables are to change. In this case, while the volume of the SaaS data is expected to grow, the schema itself is relatively stable and we’re unlikely to see sudden shifts in column names or table structure. That reduces the risk of unexpected breakages from the data source.
 
-Downstream, however, the dependencies are extensive. Since MRR and ARR are core business metrics, they power multiple dashboards and reports, and are often accessed at various levels - by product, customer, region, or billing cycle. This makes the staging layer a critical foundation, and any inconsistencies here could ripple through the entire analytics stack.
+Downstream, however, the dependencies are extensive. Since MRR and ARR are core business metrics, they power multiple dashboards and reports, and are often accessed at various levels - by product, customer, region, or billing cycle. This makes the staging layer a critical foundation, and any inconsistencies here could ripple through the entire analytics stack.  
+
+<img width="1024" height="1024" alt="img5" src="https://github.com/user-attachments/assets/4b728d23-e67f-4c95-a27d-11c8d811290b" />
+
 
 To design a stable and reusable staging layer that meets these needs, I focused on four key principles:
 
-![Materialization Type](https://docs.getdbt.com/docs/build/materializations)
+[Materialization Type](https://docs.getdbt.com/docs/build/materializations):  
+
 For performance and reliability, I used table materialization. This ensures staging models are persisted in the warehouse and can be read efficiently across many downstream queries. Views are avoided as they recalculate on every run, and incremental materialization is skipped for now since the data doesn’t support row-based updates or changelogs.
 
-Rigorous Standardization
+Rigorous Standardization:  
+
 All transformations, i.e. renaming, casting, formatting, and null handling are applied in a consistent, deterministic way. The staging layer acts as the single source of formatting truth, ensuring downstream models don’t have to reapply the same logic. This simplifies maintenance and supports cleaner business logic.
 
-Test Coverage and Logic Consolidation
+Test Coverage and Logic Consolidation:  
+
 While dbt’s built-in tests like not_null and unique are applied where relevant, I also incorporated composite boolean columns using CASE statements to pre-encode business logic in the staging layer. These derived flags simplify operations in later models, reducing the need for repetitive conditional logic downstream.
 
-Backward Compatibility
+Backward Compatibility:  
+
 To preserve trust across all downstream layers, I avoid changing column names, types, or logic within the staging models without clear versioning or documentation. The staging layer is treated as an interface contract and stability here ensures that all dependent models and dashboards remain functional and consistent.
 
 By planning with both the source data structure and the reporting needs in mind, the staging layer becomes a reliable interface and not just a cleanup step, but a well-defined starting point for building confident and scalable data models. Again, the design of the staging layer will always depend on the nature of upstream and downstream dependencies, whether the source is volatile or the downstream models are complex and widely used. Accounting for these dynamics early helps prevent costly rework later on.  
@@ -95,12 +102,15 @@ Moreover, documentation plays a central role in model building. I include a tabl
 
 <figure>
   <img width="859" height="433" alt="2025-07-21 (4)" src="https://github.com/user-attachments/assets/741e901b-6760-408a-857e-8395e72ce099" /><br>
-  <figcaption style="text-align:center;"><em>Figure 3:</em> staging model for customer product table</figcaption>
+  <figcaption style="text-align:center;"><em>Figure 3:</em> staging model for customer product table</figcaption><br>
 </figure>  
 
+  
 In parallel, I follow disciplined version control practices. Before writing any model logic, I commit the completed schema planning to Git. As development progresses, I track changes through dedicated branches, isolate updates into clear pull requests, and write meaningful commit messages. This ensures that model iterations are easy to follow and reduces the risk of errors in collaborative settings.
 
 Writing a model in dbt is not just about transforming data. It is about building a transparent, reliable foundation that others can trust and build on. With clean SQL, strong documentation, and version control in place, the staging layer becomes more than just a technical step. It becomes a cornerstone of data consistency and collaboration.  
+
+In the following article, I’ll walk through the design and implementation of the intermediate layer, where we begin to shape cleaned data into meaningful structures that directly support MRR and ARR calculation.
 
 
 
