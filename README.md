@@ -43,6 +43,24 @@ Moreover, configuration files are also a core part of dbt. The sources.yml file 
 
 Additionally, in the staging layer itself, it’s considered best practice to maintain a one-to-one mapping between source tables and models. Rather than performing joins or aggregations, the staging layer focuses on light, modular transformations—renaming fields, fixing data types, handling formatting issues, and applying standard naming conventions. Keeping this layer minimal ensures that it’s easy to adapt when the raw data structure changes, and it also supports clarity when building more complex models later on.  
 
+<figure>
+  <img src="https://github.com/user-attachments/assets/640d9576-281d-4ac6-a897-c04883333162" width="600" height="355" alt="schema yml"><br>
+  <figcaption style="text-align:center;"><em>Figure 1:</em> A Snapshot of schema.yml file</figcaption>
+</figure>
+
+<br>
+<br>
+
+<figure>
+  <img src="https://github.com/user-attachments/assets/1158dfa2-32a1-4897-839d-a715f2da5394" width="600" height="351" alt="sources yml"><br>
+  <figcaption style="text-align:center;"><em>Figure 2:</em> A Snapshot of sources.yml file</figcaption>
+</figure>
+
+
+
+
+
+
 ### 4. Transformation Planning: Designing with Upstream and Downstream Awareness  
 
 When designing the staging layer, it’s important to think beyond the immediate task of cleaning data. A well-structured transformation pipeline requires awareness of both upstream volatility and downstream fragility the two factors that shape how resilient and scalable your models will be over time.
@@ -73,11 +91,18 @@ Once the planning is in place, writing the model becomes a more of a following t
 
 I use Common Table Expressions (CTEs) extensively to break down the logic into clean, modular steps. This makes it easier to understand each transformation in isolation and simplifies debugging or future updates. Additionally, wherever a transformation is applied, such as renaming a column, casting a data type, or filtering records, I include in-line comments to explain the reasoning behind the change. These comments provide context for anyone revisiting the model and are especially helpful when onboarding new team members.
 
-Moreover, documentation plays a central role in model building. I include a table-level description that aligns the model with its business context, making it easier for both technical and non-technical stakeholders to understand its purpose. At the column level, I add clear descriptions to explain the role of each field, including any transformations or assumptions. It is equally important to reference decisions around testing, such as why certain fields require uniqueness or what values are considered valid. These details help preserve clarity as the model evolves.
+Moreover, documentation plays a central role in model building. I include a table-level description that aligns the model with its business context, making it easier for both technical and non-technical stakeholders to understand its purpose. At the column level, I add clear descriptions to explain the role of each field, including any transformations or assumptions. It is equally important to reference decisions around testing, such as why certain fields require uniqueness or what values are considered valid. These details help preserve clarity as the model evolves.  
+
+<figure>
+  <img width="859" height="433" alt="2025-07-21 (4)" src="https://github.com/user-attachments/assets/741e901b-6760-408a-857e-8395e72ce099" /><br>
+  <figcaption style="text-align:center;"><em>Figure 3:</em> staging model for customer product table</figcaption>
+</figure>  
 
 In parallel, I follow disciplined version control practices. Before writing any model logic, I commit the completed schema planning to Git. As development progresses, I track changes through dedicated branches, isolate updates into clear pull requests, and write meaningful commit messages. This ensures that model iterations are easy to follow and reduces the risk of errors in collaborative settings.
 
-Writing a model in dbt is not just about transforming data. It is about building a transparent, reliable foundation that others can trust and build on. With clean SQL, strong documentation, and version control in place, the staging layer becomes more than just a technical step. It becomes a cornerstone of data consistency and collaboration.
+Writing a model in dbt is not just about transforming data. It is about building a transparent, reliable foundation that others can trust and build on. With clean SQL, strong documentation, and version control in place, the staging layer becomes more than just a technical step. It becomes a cornerstone of data consistency and collaboration.  
+
+
 
 
 
